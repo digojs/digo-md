@@ -204,8 +204,8 @@ var Compiler = (function () {
                 parse: function (source) {
                     return {
                         source: source,
-                        type: "p",
-                        children: this.parseInline(source)
+                        type: this.top || source.charAt(source.length - 1) === "\n" ? "p" : "#root",
+                        children: this.parseInline(source.replace(/\n+$/, ""))
                     };
                 }
             }
@@ -400,6 +400,9 @@ var Compiler = (function () {
             "#document": function (node) {
                 return this.renderList(node.children);
             },
+            "#root": function (node) {
+                return this.renderList(node.children);
+            },
             "#line": function (node) {
                 return "";
             },
@@ -443,10 +446,10 @@ var Compiler = (function () {
                 return "<blockquote>" + this.renderList(node.children) + "</blockquote>\n";
             },
             ul: function (node) {
-                return "<ul>" + this.renderList(node.children) + "</ul>\n";
+                return "<ul>\n" + this.renderList(node.children) + "</ul>\n";
             },
             ol: function (node) {
-                return "<ol>" + this.renderList(node.children) + "</ol>\n";
+                return "<ol>\n" + this.renderList(node.children) + "</ol>\n";
             },
             li: function (node) {
                 return "\t<li>" + this.renderList(node.children) + "</li>\n";
@@ -488,16 +491,25 @@ var Compiler = (function () {
             type: "#document",
             children: this.parseBlock(source.replace(/\r\n|\r|\u2424/g, "\n")
                 .replace(/\t/g, "    ")
-                .replace(/\u00a0/g, " "))
+                .replace(/\u00a0/g, " "), true)
         };
     };
     /**
      * 解析一个块源码。
      * @param source 要处理的源码。
+     * @param top 是否正在解析顶级标签。
      * @return 返回语法树节点数组。
      */
-    Compiler.prototype.parseBlock = function (source) {
-        return this.parseInternal(source, this.blockRules);
+    Compiler.prototype.parseBlock = function (source, top) {
+        if (top === void 0) { top = false; }
+        var oldTop = this.top;
+        this.top = top;
+        try {
+            return this.parseInternal(source, this.blockRules);
+        }
+        finally {
+            top = oldTop;
+        }
     };
     /**
      * 解析一个内联源码。

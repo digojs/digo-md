@@ -27,18 +27,30 @@ export class Compiler {
             type: "#document",
             children: this.parseBlock(source.replace(/\r\n|\r|\u2424/g, "\n")
                 .replace(/\t/g, "    ")
-                .replace(/\u00a0/g, " "))
+                .replace(/\u00a0/g, " "), true)
         };
     }
 
     /**
      * 解析一个块源码。
      * @param source 要处理的源码。
+     * @param top 是否正在解析顶级标签。
      * @return 返回语法树节点数组。
      */
-    parseBlock(source: string) {
-        return this.parseInternal(source, this.blockRules);
+    parseBlock(source: string, top = false) {
+        const oldTop = this.top;
+        this.top = top;
+        try {
+            return this.parseInternal(source, this.blockRules);
+        } finally {
+            top = oldTop;
+        }
     }
+
+    /**
+     * 标记当前是否正在解析顶级标签。
+     */
+    private top: boolean;
 
     /**
      * 解析语句块的规则。
@@ -227,8 +239,8 @@ export class Compiler {
             parse(source) {
                 return {
                     source: source,
-                    type: "p",
-                    children: this.parseInline(source)
+                    type: this.top || source.charAt(source.length - 1) === "\n" ? "p" : "#root",
+                    children: this.parseInline(source.replace(/\n+$/, ""))
                 };
             }
         }
@@ -484,6 +496,10 @@ export class Compiler {
             return this.renderList(node.children);
         },
 
+        "#root"(this: Compiler, node: Node) {
+            return this.renderList(node.children);
+        },
+
         "#line"(this: Compiler, node: Node) {
             return "";
         },
@@ -541,11 +557,11 @@ export class Compiler {
         },
 
         ul(this: Compiler, node: Node) {
-            return `<ul>${this.renderList(node.children)}</ul>\n`;
+            return `<ul>\n${this.renderList(node.children)}</ul>\n`;
         },
 
         ol(this: Compiler, node: Node) {
-            return `<ol>${this.renderList(node.children)}</ol>\n`;
+            return `<ol>\n${this.renderList(node.children)}</ol>\n`;
         },
 
         li(this: Compiler, node: Node) {
