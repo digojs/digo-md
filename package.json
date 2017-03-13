@@ -15,7 +15,8 @@
     "typescript": "next"
   },
   "scripts": {
-    "build": "tsc index.ts markdown.ts --lib es2015"
+    "build": "tsc index.ts markdown.ts --lib es2015",
+    "test": "npm run build && node -e \"require('./test/digofile').test()\""
   },
   "files": [
     "index.js",
