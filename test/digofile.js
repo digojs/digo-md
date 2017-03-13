@@ -15,7 +15,7 @@ asd
 
 exports.test = function() {
 	digo.exec("tsc index.ts .\markdown.ts --lib es6 --target es5", { cwd: ".." })
-	digo.glob("./fixtures/*/*blockquote*.md", {
+	digo.glob("./fixtures/*/*list*.md", {
         file(path) {
           //  console.log = function () { };
 			const md = digo.readFile(path).toString();

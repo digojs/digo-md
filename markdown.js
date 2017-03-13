@@ -149,7 +149,6 @@ var Compiler = (function () {
                 name: "blockquote",
                 match: /^( *>[^\n]+(\n(?! *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +["(]([^\n]+)[")])? *(?:\n+|$))[^\n]+)*\n*)+/,
                 parse: function (source) {
-                    debugger;
                     return {
                         source: source,
                         type: "blockquote",
@@ -158,7 +157,7 @@ var Compiler = (function () {
                 }
             }, {
                 name: "list",
-                match: /^( *)(reBullet) [\s\S]+?(?:\n+(?=reHr)|\n+(?=reDef)|\n{2,}(?! )(?!\1reBullet )\n*|\s*$)/,
+                match: /^( *)([*+-]|\d+\.) [\s\S]+?(?:\n+(?=(?: *[-*_]){3,} *(?:\n+|$))|\n+(?=reDef)|\n{2,}(?! )(?!\1[*+-]|\d+\. )\n*|\s*$)/,
                 parse: function (source, indent, bullet) {
                     var _this = this;
                     var children = [];
@@ -201,7 +200,7 @@ var Compiler = (function () {
                 }
             }, {
                 name: "paragraph",
-                match: /^[^\n]+/,
+                match: /^((?:[^\n]+\n?(?!hr|heading|lheading|blockquote|tag|def|fences|list))+)\n*/,
                 parse: function (source) {
                     return {
                         source: source,

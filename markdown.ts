@@ -181,7 +181,7 @@ export class Compiler {
             }
         }, {
             name: "list",
-            match: /^( *)(reBullet) [\s\S]+?(?:\n+(?=reHr)|\n+(?=reDef)|\n{2,}(?! )(?!\1reBullet )\n*|\s*$)/,
+            match: /^( *)([*+-]|\d+\.) [\s\S]+?(?:\n+(?=(?: *[-*_]){3,} *(?:\n+|$))|\n+(?=reDef)|\n{2,}(?! )(?!\1[*+-]|\d+\. )\n*|\s*$)/,
             parse(source, indent, bullet) {
                 const children: Node[] = [];
                 source.replace(/^( *)((?:[*+-]|\d+\.) +)[^\n]*(?:\n(?!\1(?:[*+-]|\d+\.) )[^\n]*)*/gm, (source2, indent2, bullet2) => {
