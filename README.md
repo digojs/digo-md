@@ -2,8 +2,8 @@
 [digo](https://github.com/digojs/digo) 插件：编译 Markdown 文件到 HTML。
 
 ## 安装
-```
-$ npm install digo-md -g
+```bash
+npm install digo-md -g
 ```
 
 ## 用法
@@ -23,5 +23,3 @@ digo.src("*.md").pipe("digo-md"), {
 ```
 
 > [1]: 插件内部已重设了此配置的默认值。
-
-## 直接使用

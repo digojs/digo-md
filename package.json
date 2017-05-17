@@ -1,25 +1,25 @@
 {
-  "name": "digo-md",
-  "version": "0.0.1",
-  "repository": "http://github.com/digojs/digo-tpl-js",
-  "description": "digo 插件：编译 Markdown 文件到 HTML",
-  "keywords": [
-    "digo plugin",
-    "markdown"
-  ],
-  "license": "MIT",
-  "author": "xuld <xuld@vip.qq.com>",
-  "devDependencies": {
-    "@types/node": "latest",
-    "digo": "latest",
-    "typescript": "next"
-  },
-  "scripts": {
-    "build": "tsc index.ts markdown.ts --lib es2015",
-    "test": "npm run build && node -e \"require('./test/digofile').test()\""
-  },
-  "files": [
-    "index.js",
-    "markdown.js"
-  ]
+    "name": "digo-md",
+    "version": "0.1.0",
+    "repository": "http://github.com/digojs/digo-tpl-js",
+    "description": "digo 插件：编译 Markdown 文件到 HTML",
+    "keywords": [
+        "digo plugin",
+        "markdown"
+    ],
+    "license": "MIT",
+    "author": "xuld <xuld@vip.qq.com>",
+    "devDependencies": {
+        "@types/node": "latest",
+        "digo": "latest",
+        "typescript": "next"
+    },
+    "scripts": {
+        "build": "tsc index.ts markdown.ts --lib es2015",
+        "test": "npm run build && node -e \"require('./test/digofile').test()\""
+    },
+    "files": [
+        "index.js",
+        "markdown.js"
+    ]
 }
